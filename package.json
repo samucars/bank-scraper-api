@@ -4,9 +4,11 @@
   "description": "API for collecting bank data",
   "main": "index.js",
   "scripts": {
-    "release": "standard-version",
+    "eslint": "eslint .",
+    "release": "semantic-release --dry-run",
     "start": "node index.js",
-    "test": "nyc mocha --watch --recursive"
+    "test": "nyc mocha --recursive",
+    "test:watch": "nyc mocha --watch --recursive"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,11 @@
   "directories": {
     "test": "test"
   },
+  "pre-commit": [
+    "eslint",
+    "test",
+    "release"
+  ],
   "dependencies": {
     "@hapi/joi": "^15.1.0",
     "body-parser": "^1.19.0",
@@ -37,7 +44,8 @@
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
-    "sinon": "^7.3.2",
-    "standard-version": "^6.0.1"
+    "pre-commit": "^1.2.2",
+    "semantic-release": "^15.13.18",
+    "sinon": "^7.3.2"
   }
 }
