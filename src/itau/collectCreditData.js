@@ -5,11 +5,8 @@ module.exports = async (req, res, next) => {
     await req.page.click('#accordionExibirBoxCredito');
     await req.page.waitFor(2000);
 
-    const credit = await req.page.evaluate(
-      () => Array
-        .from(document.querySelectorAll('#exibirBoxCredito .conteudo table tr td')) // eslint-disable-line no-undef
-        .map(e => e.innerText)
-    );
+    const selector = '#exibirBoxCredito .conteudo table tr td';
+    const credit = await req.page.$$eval(selector, elements => elements.map(e => e.innerText));
 
     req.credit = credit;
 

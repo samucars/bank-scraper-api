@@ -9,7 +9,7 @@ describe('A middleware that collect credit data', () => {
     logger: { info: () => {} },
     page: {
       click: stub(),
-      evaluate: stub(),
+      $$eval: stub(),
       waitFor: stub(),
     },
   };
@@ -20,9 +20,11 @@ describe('A middleware that collect credit data', () => {
     assert.equal(req.page.waitFor.firstCall.args[0], 2000);
   });
   it('should return a credit data', async () => {
-    req.page.evaluate.callsFake(() => Promise.resolve('credit'));
+    req.page.$$eval.callsFake((selector, callback) => callback([{ innerText: '123' }]));
     await collectCreditData(req, res, err => assert.equal(err, undefined));
-    assert.equal(req.credit, 'credit');
+
+    assert.equal(req.page.$$eval.firstCall.args[0], '#exibirBoxCredito .conteudo table tr td');
+    assert.equal(req.credit, '123');
   });
   it('should return a error for function callback', async () => {
     req.page.waitFor.throws({ message: 'error' });

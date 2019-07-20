@@ -6,11 +6,8 @@ module.exports = async (req, res, next) => {
     await req.page.click('#accordionExibirBoxCartoes');
     await req.page.waitFor(2000);
 
-    const cards = await req.page.evaluate(
-      () => Array
-        .from(document.querySelectorAll('#exibirBoxCartoes .conteudo table tr td')) // eslint-disable-line no-undef
-        .map(e => e.innerText)
-    );
+    const selector = '#exibirBoxCartoes .conteudo table tr td';
+    const cards = await req.page.$$eval(selector, elements => elements.map(e => e.innerText));
 
     req.cards = cards;
 
