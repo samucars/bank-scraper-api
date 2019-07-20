@@ -9,7 +9,7 @@ describe('A middleware that collect cards data', () => {
     logger: { info: () => {} },
     page: {
       click: stub(),
-      evaluate: stub(),
+      $$eval: stub(),
       waitFor: stub(),
       waitForSelector: stub(),
     },
@@ -22,9 +22,11 @@ describe('A middleware that collect cards data', () => {
     assert.equal(req.page.waitFor.firstCall.args[0], 2000);
   });
   it('should return a cards data', async () => {
-    req.page.evaluate.callsFake(() => Promise.resolve('cards'));
+    req.page.$$eval.callsFake((selector, callback) => callback([{ innerText: '123' }]));
     await collectCardsData(req, res, err => assert.equal(err, undefined));
-    assert.equal(req.cards, 'cards');
+
+    assert.equal(req.page.$$eval.firstCall.args[0], '#exibirBoxCartoes .conteudo table tr td');
+    assert.equal(req.cards, '123');
   });
   it('should return a error for function callback', async () => {
     req.page.waitFor.throws({ message: 'error' });
