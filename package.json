@@ -1,9 +1,10 @@
 {
   "name": "bank-scraper-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "API for collecting bank data",
   "main": "index.js",
   "scripts": {
+    "release": "standard-version",
     "start": "node index.js",
     "test": "nyc mocha --watch --recursive"
   },
