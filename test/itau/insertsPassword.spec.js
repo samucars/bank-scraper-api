@@ -10,15 +10,20 @@ describe('A middleware that inserts the password for the login', () => {
     body: { password: '146' },
     page: {
       click: stub(),
-      evaluate: stub(),
+      $$eval: stub(),
       waitFor: stub(),
       waitForSelector: stub(),
     },
   };
 
   it('should return the buttons options to login and click on the correct sequence', async () => {
-    const buttons = ['1 ou 2', '3 ou 4', '5 ou 6', ''];
-    req.page.evaluate.callsFake(() => Promise.resolve(buttons));
+    const buttons = [
+      { text: '1 ou 2' },
+      { text: '3 ou 4' },
+      { text: '5 ou 6' },
+      { text: '' },
+    ];
+    req.page.$$eval.callsFake((selector, callback) => callback(buttons));
 
     await insertsPassword(req, res, err => assert.equal(err, undefined));
 

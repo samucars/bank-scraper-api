@@ -5,8 +5,7 @@ module.exports = async (req, res, next) => {
     await req.page.waitForSelector('.teclas');
 
     const passwordNumbers = req.body.password.split('').map(Number);
-    const searchPasswordButtons = () => Array.from(document.querySelectorAll('.tecla')).map(e => e.text); // eslint-disable-line no-undef
-    const buttons = await req.page.evaluate(searchPasswordButtons);
+    const buttons = await req.page.$$eval('.tecla', elements => elements.map(e => e.text));
     // remove clean button
     buttons.pop();
     const combinations = buttons.map(e => e.trim().split('ou').map(Number));

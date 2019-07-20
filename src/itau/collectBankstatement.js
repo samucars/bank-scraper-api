@@ -3,28 +3,27 @@ module.exports = async (req, res, next) => {
     req.logger.info('collect bankstatement');
 
     const {
-      balance, cards, credit, overdraft
+      balance, cards, credit, overdraft, page
     } = req;
 
-    const columnDates = await req.page.evaluate(
-      () => Array
-        .from(document.querySelectorAll('#corpoTabela-gridLancamentos-pessoa-fisica tr .element--accessHide')) // eslint-disable-line no-undef
-        .map(e => e.innerText),
-    );
+    const dateSelector = '#corpoTabela-gridLancamentos-pessoa-fisica tr .element--accessHide';
+    const columnDates = await page.$$eval(dateSelector, elems => elems.map(e => e.innerText));
 
-    const accountingEntries = await req.page.evaluate(
-      () => Array
-        .from(document.querySelectorAll('#corpoTabela-gridLancamentos-pessoa-fisica tr')) // eslint-disable-line no-undef
-        .map((elem) => {
-          const childrens = Array.from(elem.children).map(children => children.innerText);
-          childrens.shift();
-          childrens.pop();
-          return childrens;
-        }),
-    );
+    const entriesSelector = '#corpoTabela-gridLancamentos-pessoa-fisica tr';
+    const getChildrens = (elem) => {
+      const childrens = Array.from(elem.children).map(children => children.innerText);
+      childrens.shift();
+      childrens.pop();
+      return childrens;
+    };
+    const accountingEntries = await page.$$eval(entriesSelector, elems => elems.map(getChildrens));
 
     const bankstatement = accountingEntries
-      .map((elem, index) => { elem.unshift(columnDates[index]); return elem; });
+      .map((elem, index) => {
+        elem.unshift(columnDates[index]);
+        const [date, description, value] = elem;
+        return { date, description, value };
+      });
 
     await req.browser.close();
 
