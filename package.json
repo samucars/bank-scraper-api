@@ -8,6 +8,7 @@
     "release": "semantic-release --dry-run",
     "start": "node index.js",
     "test": "nyc mocha --recursive",
+    "test:report": "npm test && nyc report --reporter=text-lcov | coveralls",
     "test:watch": "nyc mocha --watch --recursive"
   },
   "repository": {
@@ -26,8 +27,7 @@
   },
   "pre-commit": [
     "eslint",
-    "test",
-    "release"
+    "test"
   ],
   "dependencies": {
     "@hapi/joi": "^15.1.0",
@@ -40,6 +40,7 @@
     "puppeteer": "^1.18.1"
   },
   "devDependencies": {
+    "coveralls": "^3.0.5",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
