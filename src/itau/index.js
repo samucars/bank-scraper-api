@@ -1,3 +1,4 @@
+const validatePayload = require('./validatePayload');
 const startScraper = require('./startScraper');
 const insertsBankData = require('./insertsBankData');
 const insertsPassword = require('./insertsPassword');
@@ -7,6 +8,7 @@ const collectBalance = require('./collectBalance');
 const collectBankstatement = require('./collectBankstatement');
 
 module.exports = {
+  validatePayload,
   startScraper,
   insertsBankData,
   insertsPassword,

@@ -13,6 +13,25 @@ describe('A middleware that collect credit data', () => {
       waitFor: stub(),
     },
   };
+  beforeEach(() => {
+    const credits = [
+      {
+        children: [
+          { innerText: 'nome' },
+          { innerText: 'pré-aprovado' },
+          { innerText: 'ação' },
+        ]
+      },
+      {
+        children: [
+          { innerText: 'empréstimo x' },
+          { innerText: '7000' },
+          { innerText: 'simular' },
+        ]
+      }
+    ];
+    req.page.$$eval.callsFake((selector, callback) => callback(credits));
+  });
 
   it('should click on the "box" to display the credit', async () => {
     await collectCreditData(req, res, err => assert.equal(err, undefined));
@@ -20,11 +39,11 @@ describe('A middleware that collect credit data', () => {
     assert.equal(req.page.waitFor.firstCall.args[0], 2000);
   });
   it('should return a credit data', async () => {
-    req.page.$$eval.callsFake((selector, callback) => callback([{ innerText: '123' }]));
     await collectCreditData(req, res, err => assert.equal(err, undefined));
 
-    assert.equal(req.page.$$eval.firstCall.args[0], '#exibirBoxCredito .conteudo table tr td');
-    assert.equal(req.credit, '123');
+    assert.equal(req.page.$$eval.firstCall.args[0], '#exibirBoxCredito .conteudo table tr');
+    assert.equal(req.credits[0].name, 'empréstimo x');
+    assert.equal(req.credits[0].preApprovedValue, '7000');
   });
   it('should return a error for function callback', async () => {
     req.page.waitFor.throws({ message: 'error' });

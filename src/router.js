@@ -1,7 +1,10 @@
 const express = require('express');
 
+const error = require('./error');
 const itau = require('./itau');
 const { loggerMiddleware } = require('./logger');
+
+const { version } = require('../package.json');
 
 const router = express.Router();
 
@@ -9,6 +12,7 @@ router.use(loggerMiddleware);
 
 router.post(
   '/itau',
+  itau.validatePayload,
   itau.startScraper,
   itau.insertsBankData,
   itau.insertsPassword,
@@ -18,16 +22,9 @@ router.post(
   itau.collectBankstatement,
 );
 
-router.get('/health', (req, res) => res.json({ version: 1 })); // TODO
+router.get('/health', (req, res) => res.json({ version }));
 
-router.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-  console.log('-----------------');
-  console.log(err);
-  res.status(500).send();
-});
-
-router.all('*', (req, res) => {
-  res.status(404).json({ message: 'resource not found' });
-});
+router.use(error.handlerErrorMiddleware);
+router.all('*', error.notFoundMiddleware);
 
 module.exports = router;

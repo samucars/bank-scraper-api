@@ -5,11 +5,19 @@ module.exports = async (req, res, next) => {
     await req.page.click('#accordionExibirBoxCredito');
     await req.page.waitFor(2000);
 
-    const selector = '#exibirBoxCredito .conteudo table tr td';
-    const credit = await req.page.$$eval(selector, elements => elements.map(e => e.innerText));
-
-    req.credit = credit;
-
+    const selector = '#exibirBoxCredito .conteudo table tr';
+    const credits = await req.page.$$eval(
+      selector,
+      elements => elements
+        .map(credit => Array.from(credit.children).map(children => children.innerText))
+        .map(credit => ({
+          name: credit[0].split('\n\n')[0],
+          preApprovedValue: credit[1]
+        }))
+    );
+    req.credits = credits;
+    // remove titles
+    req.credits.shift();
     return next();
   } catch (error) {
     return next(error);

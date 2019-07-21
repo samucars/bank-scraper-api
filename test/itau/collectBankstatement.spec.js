@@ -4,9 +4,7 @@ const { stub } = require('sinon');
 const collectBankstatement = require('../../src/itau/collectBankstatement');
 
 describe('A middleware that collect bank statement', () => {
-  const res = {
-    json: stub()
-  };
+  const res = { json: stub() };
   const req = {
     logger: { info: () => {} },
     page: { $$eval: stub() },
@@ -17,21 +15,18 @@ describe('A middleware that collect bank statement', () => {
     const columnDates = [{ innerText: '12 jul' }];
     req.page.$$eval.onCall(0).callsFake((selector, callback) => callback(columnDates));
 
-    const accountingEntries = [
-      {
-        children: [
-          { innerText: '' },
-          { innerText: 'crédio em conta' },
-          { innerText: '200' },
-          { innerText: '' },
-        ]
-      }
-    ];
+    const accountingEntries = [{
+      children: [
+        { innerText: '' },
+        { innerText: 'crédio em conta' },
+        { innerText: '200' },
+        { innerText: '' },
+      ]
+    }];
     req.page.$$eval.onCall(1).callsFake((selector, callback) => callback(accountingEntries));
 
     await collectBankstatement(req, res, err => assert.equal(err, undefined));
   });
-
   beforeEach(() => {
     req.page.$$eval.reset();
   });

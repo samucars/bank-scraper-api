@@ -15,18 +15,39 @@ describe('A middleware that collect cards data', () => {
     },
   };
 
+  beforeEach(() => {
+    const cards = [
+      {
+        children: [
+          { innerText: 'cartão' },
+          { innerText: 'data' },
+          { innerText: 'valor' },
+          { innerText: 'fatura' },
+        ]
+      },
+      {
+        children: [
+          { innerText: 'cartão x' },
+          { innerText: '00/00/0000' },
+          { innerText: '0,00' },
+          { innerText: 'aberta' },
+        ]
+      }
+    ];
+    req.page.$$eval.callsFake((selector, callback) => callback(cards));
+  });
+
   it('should click on the "box" to display the cards', async () => {
     await collectCardsData(req, res, err => assert.equal(err, undefined));
-    assert.equal(req.page.waitForSelector.firstCall.args[0], '#accordionExibirBoxCartoes');
     assert.equal(req.page.click.firstCall.args[0], '#accordionExibirBoxCartoes');
     assert.equal(req.page.waitFor.firstCall.args[0], 2000);
   });
   it('should return a cards data', async () => {
-    req.page.$$eval.callsFake((selector, callback) => callback([{ innerText: '123' }]));
     await collectCardsData(req, res, err => assert.equal(err, undefined));
-
-    assert.equal(req.page.$$eval.firstCall.args[0], '#exibirBoxCartoes .conteudo table tr td');
-    assert.equal(req.cards, '123');
+    assert.equal(req.page.$$eval.firstCall.args[0], '#exibirBoxCartoes .conteudo table tr');
+    assert.equal(req.cards[0].name, 'cartão x');
+    assert.equal(req.cards[0].dueDate, '00/00/0000');
+    assert.equal(req.cards[0].value, '0,00');
   });
   it('should return a error for function callback', async () => {
     req.page.waitFor.throws({ message: 'error' });

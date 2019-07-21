@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
     await req.page.click('#btnLoginSubmit');
 
     // wait for page load and redirect
-    await req.page.waitFor(10000);
+    await req.page.waitFor(13000);
 
     return next();
   } catch (error) {

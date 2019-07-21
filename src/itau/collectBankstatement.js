@@ -3,20 +3,20 @@ module.exports = async (req, res, next) => {
     req.logger.info('collect bankstatement');
 
     const {
-      balance, cards, credit, overdraft, page
+      balance, cards, credits, overdraft, page
     } = req;
 
     const dateSelector = '#corpoTabela-gridLancamentos-pessoa-fisica tr .element--accessHide';
     const columnDates = await page.$$eval(dateSelector, elems => elems.map(e => e.innerText));
 
     const entriesSelector = '#corpoTabela-gridLancamentos-pessoa-fisica tr';
-    const getChildrens = (elem) => {
+    // the $$eval function forces this syntax
+    const accountingEntries = await page.$$eval(entriesSelector, elems => elems.map((elem) => {
       const childrens = Array.from(elem.children).map(children => children.innerText);
       childrens.shift();
       childrens.pop();
       return childrens;
-    };
-    const accountingEntries = await page.$$eval(entriesSelector, elems => elems.map(getChildrens));
+    }));
 
     const bankstatement = accountingEntries
       .map((elem, index) => {
@@ -30,7 +30,7 @@ module.exports = async (req, res, next) => {
     return res.json({
       balance,
       cards,
-      credit,
+      credits,
       overdraft,
       bankstatement,
     });
