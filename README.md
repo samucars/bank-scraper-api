@@ -47,7 +47,7 @@ body:
 }
 
 ```
-The average response time is 45 seconds
+The average response time is 50 seconds
 
 ## Future resources
 
