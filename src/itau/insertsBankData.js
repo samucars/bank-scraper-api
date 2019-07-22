@@ -11,9 +11,9 @@ module.exports = async (req, res, next) => {
     await req.page.waitFor(150);
     await req.page.click('#btnLoginSubmit');
 
-    req.logger.info('wait for 20 seconds');
+    req.logger.info('wait for 25 seconds');
     // wait for page load and redirect
-    await req.page.waitFor(20000);
+    await req.page.waitFor(25000);
 
     return next();
   } catch (error) {

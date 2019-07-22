@@ -35,7 +35,7 @@ describe('A middleware that inserts bank data for the login', () => {
   });
   it('should wait for page load', async () => {
     await insertsBankData(req, res, err => assert.equal(err, undefined));
-    assert.equal(req.page.waitFor.secondCall.args[0], 20000);
+    assert.equal(req.page.waitFor.secondCall.args[0], 25000);
   });
   it('should return a error for function callback', async () => {
     req.page.waitForSelector.throws({ message: 'error' });
