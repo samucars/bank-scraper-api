@@ -36,11 +36,10 @@ npm test
 
 For now supports only itau
 
-1. POST /itau
+*1. POST /itau*
 
 ```javascript
 body:
-
 {
   branch: '',
   bankaccount: '',
