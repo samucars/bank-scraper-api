@@ -3,7 +3,7 @@ module.exports = async (req, res, next) => {
     req.logger.info('collect cards data');
 
     await req.page.click('#accordionExibirBoxCartoes');
-    await req.page.waitFor(2000);
+    await req.page.waitFor(3000);
 
     const selector = '#exibirBoxCartoes .conteudo table tr';
     const cards = await req.page.$$eval(

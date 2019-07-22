@@ -2,8 +2,6 @@ module.exports = async (req, res, next) => {
   try {
     req.logger.info('inserts password');
 
-    await req.page.waitForSelector('.teclas');
-
     const passwordNumbers = req.body.password.split('').map(Number);
     const buttons = await req.page.$$eval('.tecla', elements => elements.map(e => e.text));
     // remove clean button
@@ -20,7 +18,7 @@ module.exports = async (req, res, next) => {
 
     await req.page.click('#acessar');
     // wait for page load
-    await req.page.waitFor(8000);
+    await req.page.waitFor(10000);
 
     return next();
   } catch (error) {

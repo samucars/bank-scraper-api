@@ -40,7 +40,7 @@ describe('A middleware that collect cards data', () => {
   it('should click on the "box" to display the cards', async () => {
     await collectCardsData(req, res, err => assert.equal(err, undefined));
     assert.equal(req.page.click.firstCall.args[0], '#accordionExibirBoxCartoes');
-    assert.equal(req.page.waitFor.firstCall.args[0], 2000);
+    assert.equal(req.page.waitFor.firstCall.args[0], 3000);
   });
   it('should return a cards data', async () => {
     await collectCardsData(req, res, err => assert.equal(err, undefined));

@@ -30,12 +30,12 @@ describe('A middleware that inserts bank data for the login', () => {
   });
   it('should click the login button', async () => {
     await insertsBankData(req, res, err => assert.equal(err, undefined));
-    assert.equal(req.page.waitFor.firstCall.args[0], 50);
+    assert.equal(req.page.waitFor.firstCall.args[0], 150);
     assert.equal(req.page.click.firstCall.args[0], '#btnLoginSubmit');
   });
   it('should wait for page load', async () => {
     await insertsBankData(req, res, err => assert.equal(err, undefined));
-    assert.equal(req.page.waitFor.secondCall.args[0], 13000);
+    assert.equal(req.page.waitFor.secondCall.args[0], 16000);
   });
   it('should return a error for function callback', async () => {
     req.page.waitForSelector.throws({ message: 'error' });

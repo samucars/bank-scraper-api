@@ -8,11 +8,12 @@ module.exports = async (req, res, next) => {
     await req.page.waitForSelector('#conta');
     await req.page.type('#conta', req.body.bankaccount);
 
-    await req.page.waitFor(50);
+    await req.page.waitFor(150);
     await req.page.click('#btnLoginSubmit');
 
+    req.logger.info('wait for 16 seconds');
     // wait for page load and redirect
-    await req.page.waitFor(13000);
+    await req.page.waitFor(16000);
 
     return next();
   } catch (error) {

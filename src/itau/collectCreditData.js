@@ -3,7 +3,7 @@ module.exports = async (req, res, next) => {
     req.logger.info('collect credit data');
 
     await req.page.click('#accordionExibirBoxCredito');
-    await req.page.waitFor(2000);
+    await req.page.waitFor(3000);
 
     const selector = '#exibirBoxCredito .conteudo table tr';
     const credits = await req.page.$$eval(

@@ -21,7 +21,7 @@ describe('A middleware that collect balance', () => {
   it('should click on button for view bank statement', async () => {
     await collectBalance(req, res, err => assert.equal(err, undefined));
     assert.equal(req.page.click.firstCall.args[0], '#VerExtrato');
-    assert.equal(req.page.waitFor.firstCall.args[0], 2000);
+    assert.equal(req.page.waitFor.firstCall.args[0], 5000);
   });
   it('should return a balance', async () => {
     req.page.$eval.callsFake((selector, callback) => callback({ innerText: 100 }));
